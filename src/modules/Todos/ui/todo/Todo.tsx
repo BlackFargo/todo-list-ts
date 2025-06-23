@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import type { TodoProps } from '../../types'
 
 export const Todo: FC<TodoProps> = ({
@@ -12,9 +12,8 @@ export const Todo: FC<TodoProps> = ({
 }) => {
 	return (
 		<li
-			className={`mb-2 flex flex-col gap-y-2 sm:flex-row break-all fade-in ${
-				!todo.isVisible ? 'fade-out' : ''
-			}`}
+			className={`mb-2 flex flex-col gap-y-2 sm:flex-row break-all 
+			 ${!todo.isVisible ? 'fade-out' : 'fade-in'}`}
 			key={todo.id}
 		>
 			<div

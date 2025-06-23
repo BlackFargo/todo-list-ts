@@ -28,6 +28,7 @@ export const List: FC<Props> = ({
 		<ul>
 			{todos.map(todo => (
 				<Todo
+					key={todo.id}
 					todo={todo}
 					editTexts={editTexts}
 					toggleTodoCompleted={toggleTodoCompleted}
