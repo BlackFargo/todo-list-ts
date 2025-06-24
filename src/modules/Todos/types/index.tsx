@@ -13,7 +13,6 @@ export type TodoType = {
 	title: string
 	completed: boolean
 	isEditing: boolean
-	isVisible: boolean
 }
 
 export type Status = 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -44,4 +43,18 @@ export type TodoProps = {
 	handleEditInputChange: (
 		id: number
 	) => (e: ChangeEvent<HTMLInputElement>) => void
+}
+
+export type ListProps = {
+	todos: TodoType[]
+
+	toggleTodoCompleted: (id: number) => void
+	deleteTodo: (id: number) => void
+	handleEditInputChange: (
+		id: number
+	) => (e: React.ChangeEvent<HTMLInputElement>) => void
+	editTexts: Record<number, string>
+	editTodo: (payload: { id: number; value: string }) => void
+	toggleEditStatus: (id: number) => void
+	nodeRefs: Record<number, React.RefObject<HTMLLIElement | null>>
 }

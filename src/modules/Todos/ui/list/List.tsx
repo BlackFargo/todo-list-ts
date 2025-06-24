@@ -1,21 +1,10 @@
 import type { FC } from 'react'
-import type { TodoType } from '../../types'
+import React from 'react'
+import type { ListProps } from '../../types'
 import { Todo } from '../todo/Todo'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
-type Props = {
-	todos: TodoType[]
-
-	toggleTodoCompleted: (id: number) => void
-	deleteTodo: (id: number) => void
-	handleEditInputChange: (
-		id: number
-	) => (e: React.ChangeEvent<HTMLInputElement>) => void
-	editTexts: Record<number, string>
-	editTodo: (payload: { id: number; value: string }) => void
-	toggleEditStatus: (id: number) => void
-}
-
-export const List: FC<Props> = ({
+export const List: FC<ListProps> = ({
 	todos,
 	toggleTodoCompleted,
 	deleteTodo,
@@ -23,21 +12,35 @@ export const List: FC<Props> = ({
 	editTexts,
 	editTodo,
 	toggleEditStatus,
+	nodeRefs,
 }) => {
 	return (
-		<ul>
-			{todos.map(todo => (
-				<Todo
-					key={todo.id}
-					todo={todo}
-					editTexts={editTexts}
-					toggleTodoCompleted={toggleTodoCompleted}
-					deleteTodo={deleteTodo}
-					editTodo={editTodo}
-					toggleEditStatus={toggleEditStatus}
-					handleEditInputChange={handleEditInputChange}
-				/>
-			))}
-		</ul>
+		<TransitionGroup component='ul'>
+			{todos.map(todo => {
+				if (!nodeRefs[todo.id]) {
+					nodeRefs[todo.id] = React.createRef()
+				}
+				return (
+					<CSSTransition
+						classNames={'todo'}
+						timeout={300}
+						unmountOnExit
+						nodeRef={nodeRefs[todo.id]}
+						key={todo.id}
+					>
+						<Todo
+							ref={nodeRefs[todo.id]}
+							todo={todo}
+							editTexts={editTexts}
+							toggleTodoCompleted={toggleTodoCompleted}
+							deleteTodo={deleteTodo}
+							editTodo={editTodo}
+							toggleEditStatus={toggleEditStatus}
+							handleEditInputChange={handleEditInputChange}
+						/>
+					</CSSTransition>
+				)
+			})}
+		</TransitionGroup>
 	)
 }

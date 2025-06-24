@@ -39,7 +39,6 @@ export const fetchTodos = createAsyncThunk<
 		const customData: EditableItem[] = data.map((prev: TodoType) => ({
 			...prev,
 			isEditing: false,
-			isVisible: true,
 		}))
 		return customData
 	} catch (error: unknown) {
@@ -155,11 +154,6 @@ export const todosSlice = createSlice({
 					: todo
 			)
 		},
-		turnOnDeleteAnim(state, action: PayloadAction<number>) {
-			state.todos = state.todos.map(todo =>
-				todo.id === action.payload ? { ...todo, isVisible: false } : todo
-			)
-		},
 	},
 	extraReducers: builder => {
 		builder
@@ -227,6 +221,5 @@ export const todosSlice = createSlice({
 	},
 })
 
-export const { addTodo, toggleEditStatus, turnOnDeleteAnim } =
-	todosSlice.actions
+export const { addTodo, toggleEditStatus } = todosSlice.actions
 export default todosSlice.reducer

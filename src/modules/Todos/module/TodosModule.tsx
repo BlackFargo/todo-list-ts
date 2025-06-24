@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Form } from '../ui/form/Form'
 import {
 	addTodo,
@@ -8,7 +8,6 @@ import {
 	deleteTodo,
 	editTodo,
 	toggleEditStatus,
-	turnOnDeleteAnim,
 } from '../store/todosSlice'
 import { useAppDispatch, useAppSelector } from '../../../shared/hooks/hooks'
 import { List } from '../ui/list/List'
@@ -23,7 +22,7 @@ export const TodosModule: FC = () => {
 	const dispatch = useAppDispatch()
 	const [typeTodos, setTypeTodos] = useState('all')
 
-	console.log(todos)
+	const nodeRefs = useRef<Record<number, React.RefObject<HTMLLIElement>>>({})
 
 	const submitHandler = useCallback(
 		(e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +33,6 @@ export const TodosModule: FC = () => {
 					title: value,
 					completed: false,
 					isEditing: false,
-					isVisible: true,
 				}
 				dispatch(addTodo(newTodo))
 				setValue('')
@@ -62,10 +60,7 @@ export const TodosModule: FC = () => {
 
 	const handleDeleteTodo = useCallback(
 		(id: number) => {
-			dispatch(turnOnDeleteAnim(id))
-			setTimeout(() => {
-				dispatch(deleteTodo(id))
-			}, 300)
+			dispatch(deleteTodo(id))
 		},
 		[dispatch]
 	)
@@ -98,7 +93,7 @@ export const TodosModule: FC = () => {
 		displayedTodos = incompleted
 	}
 	return (
-		<div className='flex flex-col gap-y-5 bg-white p-5  h-[800px] overflow-auto max-w-xl'>
+		<div className='flex flex-col gap-y-5 bg-white p-5  h-[800px] overflow-auto max-w-xl mt-10'>
 			<Form
 				value={value}
 				setValue={setValue}
@@ -113,6 +108,7 @@ export const TodosModule: FC = () => {
 				editTexts={editTexts}
 				editTodo={handleEditTodo}
 				toggleEditStatus={handleToggleEditStatus}
+				nodeRefs={nodeRefs.current}
 			/>
 		</div>
 	)
