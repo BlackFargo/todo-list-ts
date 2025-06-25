@@ -80,8 +80,9 @@ export const TodosModule: FC = () => {
 	)
 
 	useEffect(() => {
+		if (todos.length !== 0) return
 		dispatch(fetchTodos())
-	}, [dispatch])
+	}, [todos.length, dispatch])
 
 	let displayedTodos: TodoType[] = todos
 

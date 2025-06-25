@@ -11,7 +11,7 @@ import type {
 } from '../types'
 
 const initialState: State = {
-	todos: [],
+	todos: JSON.parse(localStorage.getItem('todos') || '[]'),
 	status: 'idle',
 	loading: false,
 	error: null,
